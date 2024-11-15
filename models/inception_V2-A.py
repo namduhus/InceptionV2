@@ -1,3 +1,6 @@
+#### 
+# Inception V2 Figure 5
+####
 import torch
 import torch.nn as nn
 
