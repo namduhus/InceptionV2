@@ -73,46 +73,33 @@ class InceptionV2(nn.Module):
     def forward(self, x):
       # 초기 Conv 및 Pooling 계층
       x = self.conv1(x)
-      print("After conv1:", x.shape)  # 예상: [batch_size, 32, 149, 149]
 
       x = self.conv2(x)
-      print("After conv2:", x.shape)  # 예상: [batch_size, 32, 147, 147]
       
       x = self.conv3(x)
-      print("After conv3:", x.shape)  # 예상: [batch_size, 64, 147, 147]
 
       x = self.pool1(x)
-      print("After pool1:", x.shape)  # 예상: [batch_size, 64, 73, 73]
       
       x = self.conv4(x)
-      print("After conv4:", x.shape)  # 예상: [batch_size, 80, 71, 71]
       
       x = self.conv5(x)
-      print("After conv5:", x.shape)  # 예상: [batch_size, 192, 35, 35]
        
       x = self.conv6(x)
-      print("After conv6:", x.shape)  # 예상: [batch_size, 256, 35, 35]
 
       x = self.channel_adjust(x)
-      print("After channel_adjust:", x.shape)  # 예상: [batch_size, 288, 35, 35]
 
       # Inception A 모듈 (3회)
       x = self.inception_A1(x)
-      print("After inception_A1:", x.shape)  # 예상: [1, 288, 35, 35]
       
       x = self.inception_A2(x)
-      print("After inception_A2:", x.shape)  # 예상: [1, 288, 35, 35]
       
       x = self.inception_A3(x)
-      print("After inception_A3:", x.shape)  # 예상: [1, 288, 35, 35]
 
       # 35x35 -> 17x17 그리드 축소
       x = self.reduction_1(x)
-      print("After reduction_1:", x.shape)  # 예상: [1, 768, 17, 17]
       
       # Inception B 모듈 (5회)
       x = self.inception_B1(x)
-      print("After inception_B1:", x.shape)  # 예상: [1, 768, 17, 17]
       x = self.inception_B2(x)
       x = self.inception_B3(x)
       x = self.inception_B4(x)
@@ -120,21 +107,16 @@ class InceptionV2(nn.Module):
 
       # 17x17 -> 8x8 그리드 축소
       x = self.reduction_2(x)
-      print("After reduction_2:", x.shape)  # 예상: [1, 1280, 8, 8]
       
       # Inception C 모듈 (2회)
       x = self.inception_C1(x)
-      print("After inception_C1:", x.shape)  # 예상: [1, 2048, 8, 8]
       x = self.inception_C2(x)
 
       # 최종 풀링 및 분류 계층
       x = self.pool2(x)
-      print("After pool2:", x.shape)  # 예상: [1, 2048, 1, 1]
 
       x = torch.flatten(x, 1)
-      print("After flatten:", x.shape)  # 예상: [1, 2048]
       
       x = self.fc(x)
-      print("After fc:", x.shape)  # 예상: [1, 1000]
 
       return x
